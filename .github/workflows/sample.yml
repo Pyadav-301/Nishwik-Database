@@ -1,1 +1,29 @@
+name: Auto Deploy SQL
+
+on:
+  push:
+    paths:
+      - "database/**"
+    branches:
+      - main
+
+jobs:
+  deploy-sql:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run SQL Scripts
+      uses: azure/sql-action@v2
+      with:
+        connection-string: >
+          Server=${{ secrets.SQL_SERVER }};
+          Database=${{ secrets.SQL_DATABASE }};
+          User Id=${{ secrets.SQL_USER }};
+          Password=${{ secrets.SQL_PASSWORD }};
+          Encrypt=True;
+          TrustServerCertificate=True;
+        path: "./database/"
 
